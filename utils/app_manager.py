@@ -6,6 +6,8 @@
 # --------------------------------------------------------
 # https://github.com/smartlegionlab/
 # --------------------------------------------------------
+import datetime
+
 from utils.configs import Config
 from utils.printers import SmartPrinter
 from utils.todo_managers import TodoManagerJSON
@@ -28,8 +30,8 @@ class AppManager:
         while 1:
             self._printer.print_center(text='Main menu:')
 
-            print('1. + Add new task')
-            print('2. Task list')
+            print('1. Add new task')
+            print(f'2. Task list ({self._todo_manager.count})')
             print('0. Exit')
 
             self._printer.print_center()
@@ -51,16 +53,67 @@ class AppManager:
         self._continue()
 
     def add_task(self):
-        print('Add new task')
+        self._create_new_task()
         self._continue()
+
+    def _create_new_task(self):
+        while True:
+            self._printer.print_center(text='New task:')
+            title = self._get_title()
+            description = self._get_description()
+            due_date = self._get_due_date()
+
+            try:
+                datetime.datetime.strptime(due_date, "%Y-%m-%d %H:%M")
+            except ValueError:
+                self._show_error(text='Error! Due date must be in the format "YYYY-MM-DD HH:MM".')
+                continue
+
+            status = self._todo_manager.create_task(
+                title=title,
+                description=description,
+                due_date=due_date
+            )
+            if status:
+                print('Task created successfully.')
+                break
+
+    def _get_title(self):
+        while True:
+            title = input('Title: ')
+            if not title:
+                self._show_error(text='Error! Title cannot be empty.')
+                continue
+            return title
+
+    def _get_description(self):
+        while True:
+            description = input('Description: ')
+            if not description:
+                self._show_error(text='Error! Description cannot be empty.')
+                continue
+            return description
+
+    def _get_due_date(self):
+        while True:
+            due_date = input('Due date (format: YYYY-MM-DD HH:MM): ')
+            if not due_date:
+                self._show_error(text='Error! Due date cannot be empty.')
+                continue
+            try:
+                datetime.datetime.strptime(due_date, "%Y-%m-%d %H:%M")
+            except ValueError:
+                self._show_error(text='Error! Due date must be in the format "YYYY-MM-DD HH:MM".')
+                continue
+            return due_date
 
     def show_task_list(self):
         print('Task list')
         self._continue()
 
     def _continue(self):
-        self._printer.print_center()
-        input('Press enter to continue... ')
+        self._printer.print_framed('Press enter to continue... ')
+        input()
 
     def run(self):
         self.show_head()

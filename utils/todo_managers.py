@@ -18,6 +18,10 @@ class TodoManagerJSON:
         self.data = {'tasks': []}
         self.load()
 
+    @property
+    def count(self):
+        return len(self.data['tasks'])
+
     def load(self):
         if os.path.exists(self.filename) and os.path.getsize(self.filename) > 0:
             with open(self.filename, 'r') as f:
