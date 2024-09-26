@@ -27,7 +27,7 @@ class AppManager:
         self._printer.show_footer(url=self._config.url, copyright_=self._config.copyright_)
 
     def main_menu(self):
-        while 1:
+        while True:
             self._printer.print_center(text='Main menu:')
 
             print('1. Add new task')
@@ -55,7 +55,7 @@ class AppManager:
 
     def add_task(self):
         self._create_new_task()
-        print('Press enter ro continue...')
+        print('Press enter to continue...')
         input('')
 
     def _create_new_task(self):
@@ -70,7 +70,6 @@ class AppManager:
                 due_date=due_date
             )
             if status:
-
                 self._printer.print_framed('Task created successfully.')
                 break
 
@@ -111,12 +110,11 @@ class AppManager:
 
     def show_task_list(self):
         while True:
-            task_list = self._todo_manager.data["tasks"]
-            task_dict = {str(n): task for n, task in enumerate(task_list, 1)}
+            task_list = self._todo_manager.read_tasks()
             self._printer.print_center(f'Task list ({self._todo_manager.count}):')
-            if len(task_list):
+            if task_list:
                 for n, task in enumerate(task_list, 1):
-                    print(f'{n}. {task["title"]}')
+                    print(f'{n}. {task.title}')
             else:
                 print('Tasks not found...')
             print('0. Back')
@@ -126,8 +124,8 @@ class AppManager:
             if cmd == '0':
                 break
 
-            if cmd in task_dict.keys():
-                self.show_task(task_dict[cmd]["id"])
+            if cmd.isdigit() and 1 <= int(cmd) <= len(task_list):
+                self.show_task(task_list[int(cmd) - 1].id)
             else:
                 self._show_error(text='Error! Task not found.')
 
@@ -144,13 +142,13 @@ class AppManager:
 
     def show_task(self, task_id):
         while True:
-            self._printer.print_center(text=f'Task:')
+            self._printer.print_center(text='Task:')
             task = self._todo_manager.get_task(task_id)
             if task:
-                print(f'Title: {task["title"]}')
-                print(f'Description: {task["description"]}')
-                print(f'Due date: {task["due_date"]}')
-                print(f'Completed: {self._get_text_task_status(task["completed"])}')
+                print(f'Title: {task.title}')
+                print(f'Description: {task.description}')
+                print(f'Due date: {task.due_date}')
+                print(f'Completed: {self._get_text_task_status(task.completed)}')
                 self._printer.print_center(text='Select an option:')
                 print('1. Edit')
                 print('2. Delete')
@@ -161,11 +159,11 @@ class AppManager:
                 if cmd == '0':
                     break
                 elif cmd == '1':
-                    self._printer.print_center(f'Update task {task["title"]}:')
-                    title = self._update_task_title(task["title"])
-                    description = self._update_task_description(task["description"])
-                    due_date = self._update_due_date(due_date=task["due_date"])
-                    completed = self._update_completed(completed=task["completed"])
+                    self._printer.print_center(f'Update task {task.title}:')
+                    title = self._update_task_title(task.title)
+                    description = self._update_task_description(task.description)
+                    due_date = self._update_due_date(due_date=task.due_date)
+                    completed = self._update_completed(completed=task.completed)
                     self._todo_manager.update_task(
                         task_id=task_id,
                         title=title,
@@ -175,10 +173,10 @@ class AppManager:
                     )
                     continue
                 elif cmd == '2':
-                    self._printer.print_center(f'Delete task {task["title"]}:')
+                    self._printer.print_center(f'Delete task {task.title}:')
                     delete_flag = self._get_completed()
                     if delete_flag:
-                        status = self._todo_manager.delete_task(task["id"])
+                        status = self._todo_manager.delete_task(task.id)
                         if status:
                             self._printer.print_framed('Task deleted.')
                             break
@@ -251,10 +249,7 @@ class AppManager:
 
     @staticmethod
     def _get_text_task_status(status):
-        if status:
-            return 'Yes'
-        else:
-            return 'No'
+        return 'Yes' if status else 'No'
 
     def _continue(self):
         self._printer.print_framed('Press enter to continue... ')
