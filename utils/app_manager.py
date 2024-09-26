@@ -16,6 +16,16 @@ class AppManager:
         self._printer = SmartPrinter()
         self._config = Config()
 
-    def run(self):
+    def show_head(self):
         self._printer.show_head(text=self._config.name)
+
+    def show_footer(self):
         self._printer.show_footer(url=self._config.url, copyright_=self._config.copyright_)
+
+    def main_menu(self):
+        print('Welcome to the Cli TODO App!')
+
+    def run(self):
+        self.show_head()
+        self.main_menu()
+        self.show_footer()
