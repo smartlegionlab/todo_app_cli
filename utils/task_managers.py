@@ -12,6 +12,8 @@ import os
 import sqlite3
 import uuid
 
+from utils.configs import TaskQueries
+
 
 class Task:
     def __init__(self, title, description, due_date, completed=False):
@@ -150,17 +152,7 @@ class TaskManagerSQLite:
         self.tasks = self.load()
 
     def create_table(self):
-        self.cursor.execute('''
-            CREATE TABLE IF NOT EXISTS tasks (
-                id TEXT PRIMARY KEY,
-                title TEXT NOT NULL,
-                description TEXT,
-                due_date TEXT,
-                completed BOOLEAN NOT NULL,
-                created_at TEXT NOT NULL,
-                updated_at TEXT NOT NULL
-            )
-        ''')
+        self.cursor.execute(TaskQueries.CREATE_TABLE)
         self.connection.commit()
 
     @property
@@ -172,7 +164,7 @@ class TaskManagerSQLite:
         return sum(1 for task in self.tasks if task.completed)
 
     def load(self):
-        self.cursor.execute('SELECT * FROM tasks')
+        self.cursor.execute(TaskQueries.SELECT_ALL_TASKS)
         return [
             Task.from_dict({
                 'id': row[0],
@@ -192,16 +184,13 @@ class TaskManagerSQLite:
     def create_task(self, title, description, due_date, completed=False):
         title = self.get_unique_title(title)
         task = Task(title, description, due_date, completed)
-        self.cursor.execute('''
-            INSERT INTO tasks (id, title, description, due_date, completed, created_at, updated_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
-        ''', (task.id, task.title, task.description, task.due_date, task.completed, task.created_at, task.updated_at))
+        self.cursor.execute(TaskQueries.INSERT_TASK, (task.id, task.title, task.description, task.due_date, task.completed, task.created_at, task.updated_at))
         self.save()
         self.tasks = self.load()
         return True
 
     def get_unique_title(self, title):
-        self.cursor.execute('SELECT title FROM tasks')
+        self.cursor.execute(TaskQueries.SELECT_TASK_TITLES)
         existing_titles = {row[0] for row in self.cursor.fetchall()}
         if title not in existing_titles:
             return title
@@ -218,7 +207,7 @@ class TaskManagerSQLite:
         return self.tasks
 
     def get_task(self, task_id):
-        self.cursor.execute('SELECT * FROM tasks WHERE id = ?', (task_id,))
+        self.cursor.execute(TaskQueries.SELECT_TASK_BY_ID, (task_id,))
         row = self.cursor.fetchone()
         if row:
             return Task.from_dict({
@@ -250,23 +239,19 @@ class TaskManagerSQLite:
             completed = task.completed
 
         updated_at = datetime.datetime.now().isoformat()
-        self.cursor.execute('''
-            UPDATE tasks
-            SET title = ?, description = ?, due_date = ?, completed = ?, updated_at = ?
-            WHERE id = ?
-        ''', (title, description, due_date, completed, updated_at, task_id))
+        self.cursor.execute(TaskQueries.UPDATE_TASK, (title, description, due_date, completed, updated_at, task_id))
         self.save()
         self.tasks = self.load()
         return True
 
     def delete_task(self, task_id):
-        self.cursor.execute('DELETE FROM tasks WHERE id = ?', (task_id,))
+        self.cursor.execute(TaskQueries.DELETE_TASK, (task_id,))
         self.save()
         self.tasks = self.load()
         return True
 
     def mark_task_as_completed(self, task_id, completed):
-        self.cursor.execute('UPDATE tasks SET completed = ? WHERE id = ?', (completed, task_id))
+        self.cursor.execute(TaskQueries.UPDATE_TASK_COMPLETED, (completed, task_id))
         self.save()
         self.tasks = self.load()
         return True
