@@ -6,7 +6,7 @@
 # --------------------------------------------------------
 # https://github.com/smartlegionlab/
 # --------------------------------------------------------
-from utils.managers import AppManager
+from utils.app_manager import AppManager
 
 
 def main():
