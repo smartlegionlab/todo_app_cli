@@ -114,7 +114,7 @@ class AppManager:
             self._printer.print_center(f'Task list ({self._todo_manager.count}):')
             if task_list:
                 for n, task in enumerate(task_list, 1):
-                    print(f'{n}. {task.title}')
+                    print(f'{n}. {task.title} {task.get_completed_status_text}')
             else:
                 print('Tasks not found...')
             print('0. Back')

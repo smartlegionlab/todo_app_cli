@@ -47,6 +47,10 @@ class Task:
         task.updated_at = data['updated_at']
         return task
 
+    @property
+    def get_completed_status_text(self, completed_symbol='[✓]', not_completed_symbol='[✗]'):
+        return completed_symbol if self.completed else not_completed_symbol
+
 
 class TaskManagerJSON:
     def __init__(self, filename='todo.json'):
