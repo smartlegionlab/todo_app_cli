@@ -13,4 +13,4 @@ class Config:
     url = 'https://github.com/smartlegionlab/'
     copyright_ = 'Copyright © 2024, A.A. Suvorov'
     help_url = 'https://github.com/smartlegionlab/todo_app_cli/'
-    db = 'sqlite'  # json | sqlite
+    db = 'json'  # json | sqlite

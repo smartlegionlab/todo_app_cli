@@ -31,7 +31,7 @@ class AppManager:
             self._printer.print_center(text='Main menu:')
 
             print('1. Add new task')
-            print(f'2. Task list ({self._todo_manager.count})')
+            print(f'2. Task list ({self._todo_manager.completed_count}/{self._todo_manager.count})')
             print('0. Exit')
 
             self._printer.print_center()
@@ -187,9 +187,11 @@ class AppManager:
                 elif cmd == '3':
                     self._printer.print_center(f'Mark as done:')
                     flag = self._get_completed()
+                    self._todo_manager.mark_task_as_completed(task_id, completed=flag)
                     if flag:
-                        self._todo_manager.mark_task_as_completed(task_id)
                         self._printer.print_framed('Task marked as done.')
+                    else:
+                        self._printer.print_framed('Task not marked as done.')
                     continue
             else:
                 self._show_error(text='Error! Task not found.')

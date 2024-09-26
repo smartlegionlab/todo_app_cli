@@ -127,10 +127,10 @@ class TaskManagerJSON:
                 return True
         return False
 
-    def mark_task_as_completed(self, task_id):
+    def mark_task_as_completed(self, task_id, completed):
         for task in self.tasks:
             if task.id == task_id:
-                task.completed = True
+                task.completed = completed
                 task.updated_at = datetime.datetime.now().isoformat()
                 self.save()
                 return True
@@ -163,6 +163,7 @@ class TaskManagerSQLite:
     def count(self):
         return len(self.tasks)
 
+    @property
     def completed_count(self):
         return sum(1 for task in self.tasks if task.completed)
 
@@ -260,8 +261,8 @@ class TaskManagerSQLite:
         self.tasks = self.load()
         return True
 
-    def mark_task_as_completed(self, task_id):
-        self.cursor.execute('UPDATE tasks SET completed = ? WHERE id = ?', (True, task_id))
+    def mark_task_as_completed(self, task_id, completed):
+        self.cursor.execute('UPDATE tasks SET completed = ? WHERE id = ?', (completed, task_id))
         self.save()
         self.tasks = self.load()
         return True
