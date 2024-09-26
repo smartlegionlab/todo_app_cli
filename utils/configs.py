@@ -4,6 +4,12 @@
 # Copyright © 2024, A.A. Suvorov
 # All rights reserved.
 # --------------------------------------------------------
-# https://github.com/smartlegionlab//
+# https://github.com/smartlegionlab/
 # --------------------------------------------------------
-"""Smart tools"""
+
+
+class Config:
+    name = 'Cli TODO app'
+    url = 'https://github.com/smartlegionlab/'
+    copyright_ = 'Copyright © 2024, A.A. Suvorov'
+    help_url = 'https://github.com/smartlegionlab/todo_app_cli/'

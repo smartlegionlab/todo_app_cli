@@ -6,10 +6,16 @@
 # --------------------------------------------------------
 # https://github.com/smartlegionlab/
 # --------------------------------------------------------
+from utils.configs import Config
+from utils.printers import SmartPrinter
 
 
-class Config:
-    name = 'Cli TODO app'
-    url = 'https://github.com/smartlegionlab/'
-    info = 'Copyright © 2024, A.A. Suvorov'
-    help_url = 'https://github.com/smartlegionlab/todo_app_cli/'
+class AppManager:
+
+    def __init__(self):
+        self._printer = SmartPrinter()
+        self._config = Config()
+
+    def run(self):
+        self._printer.show_head(text=self._config.name)
+        self._printer.show_footer(url=self._config.url, copyright_=self._config.copyright_)

@@ -6,10 +6,12 @@
 # --------------------------------------------------------
 # https://github.com/smartlegionlab//
 # --------------------------------------------------------
+from utils.app_manager import AppManager
 
 
 def main():
-    print('Cli TODO App')
+    app = AppManager()
+    app.run()
 
 
 if __name__ == '__main__':
