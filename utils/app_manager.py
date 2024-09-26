@@ -45,7 +45,8 @@ class AppManager:
             elif cmd == '0':
                 break
             else:
-                self._show_error()
+                print('Invalid option!')
+                input('Press Enter to continue...')
 
     def _show_error(self, title='ERROR!!!', text='Error! Invalid input.'):
         self._printer.print_center(text=title)
@@ -54,20 +55,14 @@ class AppManager:
 
     def add_task(self):
         self._create_new_task()
-        self._continue()
+        print('Press enter ro continue...')
+        input('')
 
     def _create_new_task(self):
         while True:
-            self._printer.print_center(text='New task:')
             title = self._get_title()
-            description = self._get_description()
-            due_date = self._get_due_date()
-
-            try:
-                datetime.datetime.strptime(due_date, "%Y-%m-%d %H:%M")
-            except ValueError:
-                self._show_error(text='Error! Due date must be in the format "YYYY-MM-DD HH:MM".')
-                continue
+            description = self._get_description(title=title)
+            due_date = self._get_due_date(title=title, description=description)
 
             status = self._todo_manager.create_task(
                 title=title,
@@ -75,27 +70,34 @@ class AppManager:
                 due_date=due_date
             )
             if status:
-                print('Task created successfully.')
+
+                self._printer.print_framed('Task created successfully.')
                 break
 
     def _get_title(self):
         while True:
+            self._printer.print_center(text='Task title:')
             title = input('Title: ')
             if not title:
                 self._show_error(text='Error! Title cannot be empty.')
                 continue
             return title
 
-    def _get_description(self):
+    def _get_description(self, title):
+        self._printer.print_center(text='Task description:')
         while True:
+            print(f'Title: {title}')
             description = input('Description: ')
             if not description:
                 self._show_error(text='Error! Description cannot be empty.')
                 continue
             return description
 
-    def _get_due_date(self):
+    def _get_due_date(self, title, description):
+        self._printer.print_center(text='Due date:')
         while True:
+            print(f'Title: {title}')
+            print(f'Description: {description}')
             due_date = input('Due date (format: YYYY-MM-DD HH:MM): ')
             if not due_date:
                 self._show_error(text='Error! Due date cannot be empty.')
@@ -142,7 +144,7 @@ class AppManager:
 
     def show_task(self, task_id):
         while True:
-            self._printer.print_center(text=f'Task {task_id}:')
+            self._printer.print_center(text=f'Task:')
             task = self._todo_manager.get_task(task_id)
             if task:
                 print(f'Title: {task["title"]}')
@@ -182,6 +184,8 @@ class AppManager:
                             break
                         else:
                             self._show_error(text='Error! Task not found.')
+                    else:
+                        continue
                 elif cmd == '3':
                     self._printer.print_center(f'Mark as done:')
                     flag = self._get_completed()
@@ -192,7 +196,6 @@ class AppManager:
             else:
                 self._show_error(text='Error! Task not found.')
             break
-        self._continue()
 
     @staticmethod
     def _get_completed():
