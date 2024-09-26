@@ -1,4 +1,4 @@
-# Cli TODO app
+# Cli TODO app <sup>v0.1.0</sup>
 
 Console TODO app.
 
