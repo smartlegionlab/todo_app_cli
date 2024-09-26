@@ -9,7 +9,7 @@
 import datetime
 
 from utils.configs import Config
-from utils.task_managers import TaskManagerJSON, TaskManagerSQLite, TaskManagerFactory
+from utils.task_managers import TaskManagerFactory
 from utils.printers import SmartPrinter
 
 
@@ -132,7 +132,7 @@ class AppManager:
     @staticmethod
     def confirm_action():
         while True:
-            user_input = input("Are you sure?? (y/n): ").strip().lower()
+            user_input = input("Are you sure? (y/n): ").strip().lower()
             if user_input == 'y':
                 return True
             elif user_input == 'n':
@@ -200,7 +200,7 @@ class AppManager:
     @staticmethod
     def _get_completed():
         while True:
-            cmd = input('Mark task as completed? (y/n): ')
+            cmd = input('Are you sure? (y/n): ')
             if cmd == 'y':
                 return True
             elif cmd == 'n':
