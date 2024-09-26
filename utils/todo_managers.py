@@ -65,6 +65,12 @@ class TodoManagerJSON:
     def read_tasks(self):
         return self.data['tasks']
 
+    def get_task(self, task_id):
+        for task in self.data['tasks']:
+            if task['id'] == task_id:
+                return task
+        return None
+
     def update_task(self, task_id, title=None, description=None, due_date=None, completed=None):
         for task in self.data['tasks']:
             if task['id'] == task_id:

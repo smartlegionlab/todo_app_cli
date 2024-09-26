@@ -108,8 +108,128 @@ class AppManager:
             return due_date
 
     def show_task_list(self):
-        print('Task list')
+        task_list = self._todo_manager.data["tasks"]
+        task_dict = {str(n): task for n, task in enumerate(task_list, 1)}
+        while True:
+            self._printer.print_center(f'Task list ({self._todo_manager.count}):')
+            if len(task_list):
+                for n, task in enumerate(task_list, 1):
+                    print(f'{n}. {task["title"]}')
+            else:
+                print('Tasks not found...')
+            print('0. Back')
+            self._printer.print_center()
+            cmd = input('Select the number of tasks you want: ')
+
+            if cmd == '0':
+                break
+
+            if cmd in task_dict.keys():
+                self.show_task(task_dict[cmd]["id"])
+            else:
+                self._show_error(text='Error! Task not found.')
+
+    def show_task(self, task_id):
+        while True:
+            self._printer.print_center(text=f'Task {task_id}:')
+            task = self._todo_manager.get_task(task_id)
+            if task:
+                print(f'Title: {task["title"]}')
+                print(f'Description: {task["description"]}')
+                print(f'Due date: {task["due_date"]}')
+                print(f'Completed: {self._get_text_task_status(task["completed"])}')
+                self._printer.print_center()
+                print('1. Edit')
+                print('2. Delete')
+                print('0. Back')
+                self._printer.print_center()
+                cmd = input('Select the option you want: ')
+                if cmd == '0':
+                    break
+                elif cmd == '1':
+                    self._printer.print_center(f'Update task {task["title"]}:')
+                    title = self._update_task_title(task["title"])
+                    description = self._update_task_description(task["description"])
+                    due_date = self._update_due_date(due_date=task["due_date"])
+                    completed = self._update_completed(completed=task["completed"])
+                    self._todo_manager.update_task(
+                        task_id=task_id,
+                        title=title,
+                        description=description,
+                        due_date=due_date,
+                        completed=completed
+                    )
+                    continue
+                elif cmd == '2':
+                    status = self._todo_manager.delete_task(task["id"])
+                    if status:
+                        print('Task deleted.')
+                        break
+                    else:
+                        self._show_error(text='Error! Task not found.')
+            else:
+                self._show_error(text='Error! Task not found.')
+            break
         self._continue()
+
+    @staticmethod
+    def _get_completed():
+        while True:
+            cmd = input('Mark task as completed? (y/n): ')
+            if cmd == 'y':
+                return True
+            elif cmd == 'n':
+                return False
+            else:
+                print('Error! Invalid input.')
+
+    @staticmethod
+    def _update_task_title(title):
+        while True:
+            cmd = input('Title: ')
+            if not cmd:
+                return title
+            return cmd
+
+    @staticmethod
+    def _update_task_description(description):
+        while True:
+            cmd = input('Description: ')
+            if not cmd:
+                return description
+            return cmd
+
+    def _update_due_date(self, due_date):
+        while True:
+            cmd = input('Due date (format: YYYY-MM-DD HH:MM): ')
+            if not cmd:
+                return due_date
+            try:
+                datetime.datetime.strptime(cmd, "%Y-%m-%d %H:%M")
+            except ValueError:
+                self._show_error(text='Error! Due date must be in the format "YYYY-MM-DD HH:MM".')
+                continue
+            return cmd
+
+    @staticmethod
+    def _update_completed(completed):
+        while True:
+            cmd = input('Mark task as completed? (y/n): ')
+            if not cmd:
+                return completed
+            if cmd == 'y':
+                return True
+            elif cmd == 'n':
+                return False
+            else:
+                print('Error! Invalid input.')
+
+    @staticmethod
+    def _get_text_task_status(status):
+        if status:
+            return 'Yes'
+        else:
+            return 'No'
 
     def _continue(self):
         self._printer.print_framed('Press enter to continue... ')
