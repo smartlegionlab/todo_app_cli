@@ -4,7 +4,7 @@
 # Copyright © 2024, A.A. Suvorov
 # All rights reserved.
 # --------------------------------------------------------
-# https://github.com/smartlegionlab//
+# https://github.com/smartlegionlab/
 # --------------------------------------------------------
 import shutil
 
