@@ -129,6 +129,17 @@ class AppManager:
             else:
                 self._show_error(text='Error! Task not found.')
 
+    @staticmethod
+    def confirm_action():
+        while True:
+            user_input = input("Are you sure?? (y/n): ").strip().lower()
+            if user_input == 'y':
+                return True
+            elif user_input == 'n':
+                return False
+            else:
+                print("Please enter 'y' for yes or 'n' for no.")
+
     def show_task(self, task_id):
         while True:
             self._printer.print_center(text=f'Task {task_id}:')
@@ -138,9 +149,10 @@ class AppManager:
                 print(f'Description: {task["description"]}')
                 print(f'Due date: {task["due_date"]}')
                 print(f'Completed: {self._get_text_task_status(task["completed"])}')
-                self._printer.print_center()
+                self._printer.print_center(text='Select an option:')
                 print('1. Edit')
                 print('2. Delete')
+                print('3. Mark as done')
                 print('0. Back')
                 self._printer.print_center()
                 cmd = input('Select the option you want: ')
@@ -161,12 +173,22 @@ class AppManager:
                     )
                     continue
                 elif cmd == '2':
-                    status = self._todo_manager.delete_task(task["id"])
-                    if status:
-                        print('Task deleted.')
-                        break
-                    else:
-                        self._show_error(text='Error! Task not found.')
+                    self._printer.print_center(f'Delete task {task["title"]}:')
+                    delete_flag = self._get_completed()
+                    if delete_flag:
+                        status = self._todo_manager.delete_task(task["id"])
+                        if status:
+                            self._printer.print_framed('Task deleted.')
+                            break
+                        else:
+                            self._show_error(text='Error! Task not found.')
+                elif cmd == '3':
+                    self._printer.print_center(f'Mark as done:')
+                    flag = self._get_completed()
+                    if flag:
+                        self._todo_manager.mark_task_as_completed(task_id)
+                        self._printer.print_framed('Task marked as done.')
+                    continue
             else:
                 self._show_error(text='Error! Task not found.')
             break

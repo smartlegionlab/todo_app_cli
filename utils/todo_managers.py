@@ -94,3 +94,12 @@ class TodoManagerJSON:
                 self.save()
                 return True
         return False
+
+    def mark_task_as_completed(self, task_id):
+        for task in self.data['tasks']:
+            if task['id'] == task_id:
+                task['completed'] = True
+                task['updated_at'] = datetime.now().isoformat()
+                self.save()
+                return True
+        return False
