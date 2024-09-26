@@ -9,7 +9,7 @@
 import datetime
 
 from utils.configs import Config
-from utils.task_manager import TodoManagerJSON
+from utils.task_managers import TaskManagerJSON, TaskManagerSQLite
 from utils.printers import SmartPrinter
 
 
@@ -18,7 +18,10 @@ class AppManager:
     def __init__(self):
         self._printer = SmartPrinter()
         self._config = Config()
-        self._todo_manager = TodoManagerJSON()
+        if self._config.db == 'json':
+            self._todo_manager = TaskManagerJSON()
+        else:
+            self._todo_manager = TaskManagerSQLite()
 
     def show_head(self):
         self._printer.show_head(text=self._config.name)
@@ -97,7 +100,7 @@ class AppManager:
         while True:
             print(f'Title: {title}')
             print(f'Description: {description}')
-            due_date = input('Due date (format: YYYY-MM-DD HH:MM): ')
+            due_date = input('Due date (format: YYYY-MM-DD HH:MM): ').strip()
             if not due_date:
                 self._show_error(text='Error! Due date cannot be empty.')
                 continue
