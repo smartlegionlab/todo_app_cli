@@ -56,7 +56,8 @@ class Task:
 
 class TaskManagerJSON:
     def __init__(self, filename='todo.json'):
-        self.filename = filename
+        user_home = os.path.expanduser("~")
+        self.filename = os.path.join(user_home, filename)
         self.tasks = []
         self.load()
 
@@ -145,7 +146,8 @@ class TaskManagerJSON:
 
 class TaskManagerSQLite:
     def __init__(self, db_name='todo.db'):
-        self.db_name = db_name
+        user_home = os.path.expanduser("~")
+        self.db_name = os.path.join(user_home, db_name)
         self.connection = sqlite3.connect(self.db_name)
         self.cursor = self.connection.cursor()
         self.create_table()
@@ -184,7 +186,8 @@ class TaskManagerSQLite:
     def create_task(self, title, description, due_date, completed=False):
         title = self.get_unique_title(title)
         task = Task(title, description, due_date, completed)
-        self.cursor.execute(TaskQueries.INSERT_TASK, (task.id, task.title, task.description, task.due_date, task.completed, task.created_at, task.updated_at))
+        self.cursor.execute(TaskQueries.INSERT_TASK, (task.id, task.title, task.description,
+                                                      task.due_date, task.completed, task.created_at, task.updated_at))
         self.save()
         self.tasks = self.load()
         return True
