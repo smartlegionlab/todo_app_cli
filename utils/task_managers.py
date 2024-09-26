@@ -58,6 +58,10 @@ class TaskManagerJSON:
     def count(self):
         return len(self.tasks)
 
+    @property
+    def completed_count(self):
+        return sum(1 for task in self.tasks if task.completed)
+
     def load(self):
         if os.path.exists(self.filename) and os.path.getsize(self.filename) > 0:
             with open(self.filename, 'r') as f:
@@ -158,6 +162,9 @@ class TaskManagerSQLite:
     @property
     def count(self):
         return len(self.tasks)
+
+    def completed_count(self):
+        return sum(1 for task in self.tasks if task.completed)
 
     def load(self):
         self.cursor.execute('SELECT * FROM tasks')
@@ -261,3 +268,14 @@ class TaskManagerSQLite:
 
     def close(self):
         self.connection.close()
+
+
+class TaskManagerFactory:
+    @staticmethod
+    def create_task_manager(storage_type, **kwargs):
+        if storage_type == 'json':
+            return TaskManagerJSON(**kwargs)
+        elif storage_type == 'sqlite':
+            return TaskManagerSQLite(**kwargs)
+        else:
+            raise ValueError("Unsupported storage type. Use 'json' or 'sqlite'.")

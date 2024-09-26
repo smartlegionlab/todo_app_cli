@@ -9,7 +9,7 @@
 import datetime
 
 from utils.configs import Config
-from utils.task_managers import TaskManagerJSON, TaskManagerSQLite
+from utils.task_managers import TaskManagerJSON, TaskManagerSQLite, TaskManagerFactory
 from utils.printers import SmartPrinter
 
 
@@ -18,10 +18,7 @@ class AppManager:
     def __init__(self):
         self._printer = SmartPrinter()
         self._config = Config()
-        if self._config.db == 'json':
-            self._todo_manager = TaskManagerJSON()
-        else:
-            self._todo_manager = TaskManagerSQLite()
+        self._todo_manager = TaskManagerFactory.create_task_manager(self._config.db)
 
     def show_head(self):
         self._printer.show_head(text=self._config.name)
