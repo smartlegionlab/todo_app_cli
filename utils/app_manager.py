@@ -8,6 +8,7 @@
 # --------------------------------------------------------
 from utils.configs import Config
 from utils.printers import SmartPrinter
+from utils.todo_managers import TodoManagerJSON
 
 
 class AppManager:
@@ -15,6 +16,7 @@ class AppManager:
     def __init__(self):
         self._printer = SmartPrinter()
         self._config = Config()
+        self._todo_manager = TodoManagerJSON()
 
     def show_head(self):
         self._printer.show_head(text=self._config.name)
