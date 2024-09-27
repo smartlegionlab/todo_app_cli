@@ -61,7 +61,7 @@ class AppManager:
     def _create_new_task(self):
         while True:
             title = self._get_title()
-            description = self._get_description(title=title)
+            description = self._get_description()
             due_date = self._get_due_date(title=title, description=description)
 
             status = self._todo_manager.create_task(
@@ -82,10 +82,9 @@ class AppManager:
                 continue
             return title
 
-    def _get_description(self, title):
+    def _get_description(self):
         self._printer.print_center(text='Task description:')
         while True:
-            print(f'Title: {title}')
             description = input('Description: ')
             if not description:
                 self._show_error(text='Error! Description cannot be empty.')
@@ -160,9 +159,13 @@ class AppManager:
                     break
                 elif cmd == '1':
                     self._printer.print_center(f'Update task {task.title}:')
+                    self._printer.print_framed(f'WARNING! Press enter to the skip...')
                     title = self._update_task_title(task.title)
+                    self._printer.print_center()
                     description = self._update_task_description(task.description)
+                    self._printer.print_center()
                     due_date = self._update_due_date(due_date=task.due_date)
+                    self._printer.print_center()
                     completed = self._update_completed(completed=task.completed)
                     self._todo_manager.update_task(
                         task_id=task_id,
@@ -174,7 +177,7 @@ class AppManager:
                     continue
                 elif cmd == '2':
                     self._printer.print_center(f'Delete task {task.title}:')
-                    delete_flag = self._get_completed()
+                    delete_flag = self.confirm_action()
                     if delete_flag:
                         status = self._todo_manager.delete_task(task.id)
                         if status:
@@ -186,7 +189,7 @@ class AppManager:
                         continue
                 elif cmd == '3':
                     self._printer.print_center(f'Mark as done:')
-                    flag = self._get_completed()
+                    flag = self.confirm_action()
                     self._todo_manager.mark_task_as_completed(task_id, completed=flag)
                     if flag:
                         self._printer.print_framed('Task marked as done.')
@@ -198,35 +201,27 @@ class AppManager:
             break
 
     @staticmethod
-    def _get_completed():
-        while True:
-            cmd = input('Are you sure? (y/n): ')
-            if cmd == 'y':
-                return True
-            elif cmd == 'n':
-                return False
-            else:
-                print('Error! Invalid input.')
-
-    @staticmethod
     def _update_task_title(title):
+        print(f'Old title: {title}')
         while True:
-            cmd = input('Title: ')
+            cmd = input(f'New title: ')
             if not cmd:
                 return title
             return cmd
 
     @staticmethod
     def _update_task_description(description):
+        print(f'Old description: {description}')
         while True:
-            cmd = input('Description: ')
+            cmd = input(f'New description: ')
             if not cmd:
                 return description
             return cmd
 
     def _update_due_date(self, due_date):
+        print(f'Old due date: {due_date}')
         while True:
-            cmd = input('Due date (format: YYYY-MM-DD HH:MM): ')
+            cmd = input(f'New due date: ')
             if not cmd:
                 return due_date
             try:
@@ -236,10 +231,10 @@ class AppManager:
                 continue
             return cmd
 
-    @staticmethod
-    def _update_completed(completed):
+    def _update_completed(self, completed):
+        print(f'Old completed: {self._get_text_task_status(completed)}')
         while True:
-            cmd = input('Mark task as completed? (y/n): ')
+            cmd = input(f'Mark task as completed? (y/n): ')
             if not cmd:
                 return completed
             if cmd == 'y':
