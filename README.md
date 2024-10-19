@@ -4,6 +4,13 @@ Console TODO app.
 
 ---
 
+## Other to-do list apps:
+
+- [Desktop ToDo app](https://github.com/smartlegionlab/todo_app_desktop_flet)
+- [Telegram Bot ToDo app](https://github.com/smartlegionlab/todo_app_tg_bot) 
+
+---
+
 ## Use:
 
 - `python app.py`
