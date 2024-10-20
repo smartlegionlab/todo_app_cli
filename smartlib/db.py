@@ -35,6 +35,18 @@ class TaskDatabase:
                 INSERT INTO tasks (id, name, completed) VALUES (?, ?, ?)
             ''', (task._id, task._name, task._completed))
 
+    def get_completed_tasks(self):
+        cursor = self.connection.cursor()
+        cursor.execute('SELECT id, name, completed FROM tasks WHERE completed')
+        rows = cursor.fetchall()
+        return [Task(name=row[1], completed=row[2]) for row in rows]
+
+    def get_active_tasks(self):
+        cursor = self.connection.cursor()
+        cursor.execute('SELECT id, name, completed FROM tasks WHERE NOT completed')
+        rows = cursor.fetchall()
+        return [Task(name=row[1], completed=row[2]) for row in rows]
+
     def get_all_tasks(self):
         cursor = self.connection.cursor()
         cursor.execute('SELECT id, name, completed FROM tasks')

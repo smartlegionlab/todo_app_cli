@@ -22,7 +22,7 @@ class TaskView:
 
     def show_menu(self, total_count, active_count, completed_count):
         self.printer.print_center(text=f'Tasks ({total_count}):')
-        print('1. Add new task')
+        print('1. + Add new task')
         print(f'2. Active tasks [{active_count}]')
         print(f'3. Completed tasks [{completed_count}]')
         print('0. Exit')

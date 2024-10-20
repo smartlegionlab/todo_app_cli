@@ -22,6 +22,12 @@ class TaskController:
     def get_all_tasks(self):
         return self.task_database.get_all_tasks()
 
+    def get_active_tasks(self):
+        return self.task_database.get_active_tasks()
+
+    def get_completed_tasks(self):
+        return self.task_database.get_completed_tasks()
+
     def mark_task_as_completed(self, task_id):
         self.task_database.mark_task_as_completed(task_id)
 

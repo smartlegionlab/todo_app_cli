@@ -46,10 +46,20 @@ class AppManager:
         self.view.press_enter_to_continue()
 
     def show_task_active(self):
-        print('Active tasks...')
+        tasks = self.controller.get_active_tasks()
+        self.view.printer.print_center(text=f'Active tasks ({len(tasks)}):')
+        for task in tasks:
+            self.view.show_message(task)
+        self.view.printer.print_center()
+        self.view.press_enter_to_continue()
 
     def show_task_completed(self):
-        print('Completed tasks...')
+        tasks = self.controller.get_completed_tasks()
+        self.view.printer.print_center(text=f'Completed tasks ({len(tasks)}):')
+        for task in tasks:
+            self.view.show_message(task)
+        self.view.printer.print_center()
+        self.view.press_enter_to_continue()
 
     def run(self):
         self.view.show_head()
