@@ -27,9 +27,10 @@ class TaskView:
         print(f'3. Completed tasks [{completed_count}]')
         print('0. Exit')
 
-    def show_tasks(self, tasks):
+    @staticmethod
+    def show_tasks(tasks):
         for n, task in enumerate(tasks, 1):
-            print(f'{self.show_completed_task_emoji(task.completed)} {n}. {task.name}')
+            print(f'{task.get_completed_emoji} {n}. {task.name}')
         print(f'0. Back')
 
     @staticmethod
@@ -67,15 +68,11 @@ class TaskView:
 
     def show_task(self, task):
         self.printer.print_center(text='Task:')
-        print(f'Name: {task.name} | Uuid: {task.id}')
-        print(f'Completed: {self.show_completed_task_emoji(task.completed)}')
+        print(f'Name: {task.name}')
+        print(f'Completed: {task.get_completed_emoji}')
         self.printer.print_center(text='Select an option:')
         print('1. Edit')
         print('2. Mark as completed' if not task.completed else '2. Mark as not completed')
         print('3. Delete')
         print('0. Back')
         self.printer.print_center()
-
-    @staticmethod
-    def show_completed_task_emoji(status):
-        return '[✓]' if status else '[✗]'

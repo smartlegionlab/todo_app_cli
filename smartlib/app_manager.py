@@ -59,7 +59,6 @@ class AppManager:
                 self.view.show_tasks(tasks=tasks)
                 self.view.printer.print_center()
                 cmd = input('Select the number of tasks you want: ')
-
                 if cmd == '0':
                     break
 

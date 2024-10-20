@@ -47,3 +47,7 @@ class Task:
     @id.setter
     def id(self, value):
         self._id = value
+
+    @property
+    def get_completed_emoji(self):
+        return '[✓]' if self.completed else '[✗]'

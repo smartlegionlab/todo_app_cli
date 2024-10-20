@@ -1,4 +1,4 @@
-# Cli TODO app <sup>v0.1.3</sup>
+# Console ToDo app <sup>v0.2.0</sup>
 
 Console TODO app.
 
@@ -11,10 +11,26 @@ Console TODO app.
 
 ---
 
+## What's new:
+
+- Architectural code refactoring. Complete redesign. In progress.
+- The code has been rewritten using the MVC (Model-View-Controller) architecture.
+- Bugs fixed.
+- The user interface has been simplified and improved.
+- The structure and readability of the code has been improved, making it easier to maintain and extend functionality. (SOLID, DRY, MVC).
+- Complete refusal to store tasks in the json file. Only sqlite is now used to store tasks.
+
+## In the next updates:
+
+- Adding comments to tasks.
+
+---
+
 ## Use:
 
-- `python app.py`
-
+- Clone project
+- Go to the project folder
+- `python main.py`
 
 ---
 
