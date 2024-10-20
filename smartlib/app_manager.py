@@ -65,10 +65,6 @@ class AppManager:
 
                 if cmd.isdigit() and 1 <= int(cmd) <= len(tasks):
                     self.show_task(tasks[int(cmd) - 1])
-                    self.view.printer.print_center()
-                    cmd = input('Select the option you want: ')
-                    if cmd == '0':
-                        break
                 else:
                     self.view.show_error(text='Error! Task not found.')
 
@@ -100,6 +96,7 @@ class AppManager:
                     self.controller.delete_task(task.id)
                     self.view.show_message(f'Successfully delete task {task.name}.')
                     self.view.press_enter_to_continue()
+                    break
                 else:
                     self.view.show_message(f'Action canceled!')
 

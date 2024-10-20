@@ -54,8 +54,6 @@ class TaskDatabase:
         return [Task(task_id=row[0], name=row[1], completed=row[2]) for row in rows]
 
     def update_task(self, task):
-        print(task.id)
-        print(task.name)
         with self.connection:
             self.connection.execute('''
                 UPDATE tasks SET name = ?, completed = ? WHERE id = ?

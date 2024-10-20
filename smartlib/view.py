@@ -71,7 +71,7 @@ class TaskView:
         print(f'Completed: {self.show_completed_task_emoji(task.completed)}')
         self.printer.print_center(text='Select an option:')
         print('1. Edit')
-        print('2. Mark as done' if not task.completed else '2. Mark as completed')
+        print('2. Mark as completed' if not task.completed else '2. Mark as not completed')
         print('3. Delete')
         print('0. Back')
         self.printer.print_center()
