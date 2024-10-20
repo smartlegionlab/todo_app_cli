@@ -33,31 +33,33 @@ class TaskDatabase:
         with self.connection:
             self.connection.execute('''
                 INSERT INTO tasks (id, name, completed) VALUES (?, ?, ?)
-            ''', (task._id, task._name, task._completed))
+            ''', (task.id, task.name, task.completed))
 
     def get_completed_tasks(self):
         cursor = self.connection.cursor()
         cursor.execute('SELECT id, name, completed FROM tasks WHERE completed')
         rows = cursor.fetchall()
-        return [Task(name=row[1], completed=row[2]) for row in rows]
+        return [Task(task_id=row[0], name=row[1], completed=row[2]) for row in rows]
 
     def get_active_tasks(self):
         cursor = self.connection.cursor()
         cursor.execute('SELECT id, name, completed FROM tasks WHERE NOT completed')
         rows = cursor.fetchall()
-        return [Task(name=row[1], completed=row[2]) for row in rows]
+        return [Task(task_id=row[0], name=row[1], completed=row[2]) for row in rows]
 
     def get_all_tasks(self):
         cursor = self.connection.cursor()
         cursor.execute('SELECT id, name, completed FROM tasks')
         rows = cursor.fetchall()
-        return [Task(name=row[1], completed=row[2]) for row in rows]
+        return [Task(task_id=row[0], name=row[1], completed=row[2]) for row in rows]
 
     def update_task(self, task):
+        print(task.id)
+        print(task.name)
         with self.connection:
             self.connection.execute('''
                 UPDATE tasks SET name = ?, completed = ? WHERE id = ?
-            ''', (task._name, task._completed, task._id))
+            ''', (task.name, task.completed, task.id))
 
     def mark_task_as_completed(self, task_id):
         with self.connection:

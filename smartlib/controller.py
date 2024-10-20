@@ -19,6 +19,9 @@ class TaskController:
         task = Task(name=name)
         self.task_database.add_task(task)
 
+    def update_task(self, task):
+        return self.task_database.update_task(task)
+
     def get_all_tasks(self):
         return self.task_database.get_all_tasks()
 

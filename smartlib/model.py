@@ -10,8 +10,8 @@ import uuid
 
 
 class Task:
-    def __init__(self, name, completed=False):
-        self._id = str(uuid.uuid4())
+    def __init__(self, name, task_id=None, completed=False):
+        self._id = task_id if task_id is not None else str(uuid.uuid4())
         self._name = name
         self._completed = completed
 
@@ -39,3 +39,11 @@ class Task:
     @completed.setter
     def completed(self, value):
         self._completed = value
+
+    @property
+    def id(self):
+        return self._id
+
+    @id.setter
+    def id(self, value):
+        self._id = value

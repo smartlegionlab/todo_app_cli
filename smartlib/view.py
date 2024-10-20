@@ -27,6 +27,11 @@ class TaskView:
         print(f'3. Completed tasks [{completed_count}]')
         print('0. Exit')
 
+    def show_tasks(self, tasks):
+        for n, task in enumerate(tasks, 1):
+            print(f'{self.show_completed_task_emoji(task.completed)} {n}. {task.name}')
+        print(f'0. Back')
+
     @staticmethod
     def show_message(message):
         print(message)
@@ -48,3 +53,29 @@ class TaskView:
                 self.show_error(text='Error! Name cannot be empty.')
                 continue
             return name
+
+    @staticmethod
+    def confirm_action():
+        while True:
+            user_input = input("Are you sure? (y/n): ").strip().lower()
+            if user_input == 'y':
+                return True
+            elif user_input == 'n':
+                return False
+            else:
+                print("Please enter 'y' for yes or 'n' for no.")
+
+    def show_task(self, task):
+        self.printer.print_center(text='Task:')
+        print(f'Name: {task.name} | Uuid: {task.id}')
+        print(f'Completed: {self.show_completed_task_emoji(task.completed)}')
+        self.printer.print_center(text='Select an option:')
+        print('1. Edit')
+        print('2. Mark as done' if not task.completed else '2. Mark as completed')
+        print('3. Delete')
+        print('0. Back')
+        self.printer.print_center()
+
+    @staticmethod
+    def show_completed_task_emoji(status):
+        return '[✓]' if status else '[✗]'
