@@ -6,12 +6,12 @@
 # --------------------------------------------------------
 # https://github.com/smartlegionlab/
 # --------------------------------------------------------
-from utils.app_manager import AppManager
+from smartlib.app_manager import AppManager
 
 
 def main():
-    app = AppManager()
-    app.run()
+    app_manager = AppManager()
+    app_manager.run()
 
 
 if __name__ == '__main__':
